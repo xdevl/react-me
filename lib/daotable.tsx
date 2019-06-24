@@ -45,16 +45,20 @@ export const DaoTable: FunctionComponent<IDaoTable> = (props) => {
   </Table>;
 };
 
-export function ReflectiveDaoTable(props: IDaoTable) {
+export const ReflectiveDaoTable: FunctionComponent<IDaoTable> = (props) => {
   const addAll = <T extends {}>(set: Set<T>, ...values: T[]) => values.reduce((res, value) => res.add(value), set);
   const columns: Set<string> = props.values.reduce((set, value) => addAll(set, ...Object.keys(value)), new Set());
 
+  const override = new Map(React.Children.toArray(props.children)
+    .filter(isDaoColumn)
+    .map((child) => [child.props.field, child]));
+
   return <DaoTable values={props.values}>
-    {Array.from(columns.keys()).map((column) => (
-      <DaoColumn label={column} field={column} />
-    ))}
+    {Array.from(columns.keys()).map((column) =>
+      override.has(column) ? override.get(column) : <DaoColumn label={column} field={column} />
+    )}
   </DaoTable>;
-}
+};
 
 function isDaoColumn(node: React.ReactNode): node is ReactElement<IDaoColumn> {
   return React.isValidElement(node) && node.type === DaoColumn;

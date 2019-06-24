@@ -50,3 +50,29 @@ test("ReflectiveDaoTable renders", () => {
     </table>,
   );
 });
+
+test("ReflectiveDaoTable overrides", () => {
+  const data = [
+    { first: 1, second: "first row", third: true, four: 10.1 },
+    { first: 2, second: "second row", third: false, four: 22.2 },
+    { first: 3, second: "third row", third: true, four: 30.3 },
+  ];
+
+  const output = renderer.create(
+    <ReflectiveDaoTable values={data}>
+      <DaoColumn label="Column #1" field="first" />
+      <DaoColumn label="Column #3" field="third" />
+    </ReflectiveDaoTable>
+  ).toJSON()!;
+
+  assertRendering(output,
+    <table>
+      <thead><tr><th>Column #1</th><th>second</th><th>Column #3</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>first row</td><td>true</td><td>10.1</td></tr>
+        <tr><td>2</td><td>second row</td><td>false</td><td>22.2</td></tr>
+        <tr><td>3</td><td>third row</td><td>true</td><td>30.3</td></tr>
+      </tbody>
+    </table>,
+  );
+});
