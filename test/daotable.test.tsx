@@ -41,7 +41,7 @@ test("ReflectiveDaoTable renders", () => {
 
   assertRendering(output,
     <table>
-      <thead><tr><th>first</th><th>second</th><th>third</th></tr></thead>
+      <thead><tr><th>first</th><th>second</th><th>third</th><th>four</th></tr></thead>
       <tbody>
         <tr><td>1</td><td>first row</td><td>true</td><td>10.1</td></tr>
         <tr><td>2</td><td>second row</td><td>false</td><td>22.2</td></tr>
@@ -67,7 +67,7 @@ test("ReflectiveDaoTable overrides", () => {
 
   assertRendering(output,
     <table>
-      <thead><tr><th>Column #1</th><th>second</th><th>Column #3</th><th></th></tr></thead>
+      <thead><tr><th>Column #1</th><th>second</th><th>Column #3</th><th>four</th></tr></thead>
       <tbody>
         <tr><td>1</td><td>first row</td><td>true</td><td>10.1</td></tr>
         <tr><td>2</td><td>second row</td><td>false</td><td>22.2</td></tr>

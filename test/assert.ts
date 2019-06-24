@@ -13,9 +13,10 @@ export function dumpRendering(value: renderer.ReactTestRendererNode, depth = 0):
 
 export default function assertRendering(current: renderer.ReactTestRendererNode, expected: React.ReactNode) {
   if (typeof current === "string") {
-    expect(current).toEqual(expected);
+    expect(expected).toEqual(current);
   } else if (React.isValidElement<{ children?: React.ReactNode }>(expected)) {
-    expect(expected.type).toEqual(current.type);
+    expect(current.type).toEqual(expected.type);
+    expect(React.Children.count(expected.props.children)).toEqual(current.children ? current.children.length : 0);
     React.Children.forEach(expected.props.children, (child, index) => {
       assertRendering(current.children![index], child);
     });
