@@ -21,6 +21,6 @@ export default function assertRendering(current: renderer.ReactTestRendererNode,
       assertRendering(current.children![index], child);
     });
   } else {
-    fail(`${current} should be a string`);
+    throw new Error(`${current} should be a string`);
   }
 }

@@ -11,9 +11,12 @@ import TableRow from "@material-ui/core/TableRow";
 import React, {FunctionComponent, ReactElement} from "react";
 import ReactDOM from "react-dom";
 
+export type Renderer = (value: any) => string | ReactElement;
+
 interface IDaoColumn {
   label: string;
   field: string;
+  render?: Renderer;
 }
 
 export const DaoColumn = (props: IDaoColumn) => <span />;
@@ -23,7 +26,8 @@ interface IDaoTable {
 }
 
 export const DaoTable: FunctionComponent<IDaoTable> = (props) => {
-  const format = (value: any) => value instanceof Object ? JSON.stringify(value) : `${value}`;
+  const format = (value: any) => typeof value === "string" ? value : JSON.stringify(value);
+  const render = (renderer: Renderer | undefined, value: any) => renderer ? renderer(value) : format(value);
 
   return <Table>
     <TableHead>
@@ -37,7 +41,7 @@ export const DaoTable: FunctionComponent<IDaoTable> = (props) => {
       {props.values.map((value) => (
         <TableRow>
           {React.Children.map(props.children, (child, index) => (
-            isDaoColumn(child) && <TableCell>{format(value[child.props.field])}</TableCell>
+            isDaoColumn(child) && <TableCell>{render(child.props.render, value[child.props.field])}</TableCell>
           ))}
         </TableRow>
       ))}
@@ -55,7 +59,7 @@ export const ReflectiveDaoTable: FunctionComponent<IDaoTable> = (props) => {
 
   return <DaoTable values={props.values}>
     {Array.from(columns.keys()).map((column) =>
-      override.has(column) ? override.get(column) : <DaoColumn label={column} field={column} />
+      override.has(column) ? override.get(column) : <DaoColumn label={column} field={column} />,
     )}
   </DaoTable>;
 };
