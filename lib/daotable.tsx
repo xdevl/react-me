@@ -14,8 +14,8 @@ import ReactDOM from "react-dom";
 export type Renderer = (value: any) => string | ReactElement;
 
 interface IDaoColumn {
-  label: string;
   field: string;
+  label?: string;
   render?: Renderer;
 }
 
@@ -33,7 +33,7 @@ export const DaoTable: FunctionComponent<IDaoTable> = (props) => {
     <TableHead>
       <TableRow>
         {React.Children.map(props.children, (child, index) => (
-          isDaoColumn(child) && <TableCell>{child.props.label}</TableCell>
+          isDaoColumn(child) && <TableCell>{child.props.label || child.props.field}</TableCell>
         ))}
       </TableRow>
     </TableHead>
@@ -59,7 +59,7 @@ export const ReflectiveDaoTable: FunctionComponent<IDaoTable> = (props) => {
 
   return <DaoTable values={props.values}>
     {Array.from(columns.keys()).map((column) =>
-      override.has(column) ? override.get(column) : <DaoColumn label={column} field={column} />,
+      override.has(column) ? override.get(column) : <DaoColumn field={column} />,
     )}
   </DaoTable>;
 };
