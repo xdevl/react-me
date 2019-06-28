@@ -1,8 +1,8 @@
 {
   "name": "react-me",
-  "version": "1.0.0-beta0",
+  "version": "0.0.0",
   "description": "Enhanced components for react",
-  "main": "dist/daotable.js",
+  "main": "dist/table.js",
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc --declaration",

@@ -6,8 +6,7 @@ This library can simply be installed using npm:
 ```shell
 npm install react-me
 ```
-## Usage
-### Dao Table
+## Table
 This component simplifies the creation of tables which is usually quite verbose. From the following given data set for example:
 ```javascript
 const data = [
@@ -18,16 +17,31 @@ const data = [
 ```
 One can create a table as simply as:
 ```html
-<DaoTable values={data}>
-  <DaoColumn label="Name" field="name" />
-  <DaoColumn label="Surname" field="surname" />
-  <DaoColumn label="Age" field="age" />
-</DaoTable>
+<MeTable values={data}>
+  <MeColumn label="Name" field="name" />
+  <MeColumn label="Surname" field="surname" />
+  <MeColumn label="Age" field="age" />
+</MeTable>
 ```
-### Reflective Dao Table
-This component uses a Dao Table under the hood but automatically finds out its columns based on the input set. This component can be really handy for quick prototyping and during early development phases when your data structure is not fully defined yet and is prone to change.
+### Automatic column generation
+`MeAutoTable` is a component that uses a regular `MeTable` under the hood but automatically finds out its columns based on the input set. This component can be really handy for quick prototyping and during early development phases when your data structure is not fully defined yet and is prone to change.
 ```html
-<ReflectiveDaoTable values={data} />
+<MeAutoTable values={data} />
+```
+### Custom cell rendering
+It is possible to customise how cells are being rendered for a given column by using the `render` attribute as shown below:
+```html
+<MeColumn label="Name" field="name" render={(value) =>
+    <span>My name is {value}</span>
+}>
+```
+Custom cell rendering can also be achieved with `MeAutoTable` in order to change both the resulting cell and the column label, just manually define the column you want to change:
+```html
+<MeAutoTable values={data}>
+    <MeColumn label="How old is he?" field="age" render={(value) =>
+        <span>{age} years old</span>
+    }>
+</MeAutoTable>
 ```
 
 ## License

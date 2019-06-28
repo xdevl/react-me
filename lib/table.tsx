@@ -13,19 +13,19 @@ import ReactDOM from "react-dom";
 
 export type Renderer = (value: any) => string | ReactElement;
 
-interface IDaoColumn {
+interface IMeColumn {
   field: string;
   label?: string;
   render?: Renderer;
 }
 
-export const DaoColumn = (props: IDaoColumn) => <span />;
+export const MeColumn = (props: IMeColumn) => <span />;
 
-interface IDaoTable {
+interface IMeTable {
   values: any[];
 }
 
-export const DaoTable: FunctionComponent<IDaoTable> = (props) => {
+export const MeTable: FunctionComponent<IMeTable> = (props) => {
   const format = (value: any) => typeof value === "string" ? value : JSON.stringify(value);
   const render = (renderer: Renderer | undefined, value: any) => renderer ? renderer(value) : format(value);
 
@@ -33,7 +33,7 @@ export const DaoTable: FunctionComponent<IDaoTable> = (props) => {
     <TableHead>
       <TableRow>
         {React.Children.map(props.children, (child, index) => (
-          isDaoColumn(child) && <TableCell>{child.props.label || child.props.field}</TableCell>
+          isMeColumn(child) && <TableCell>{child.props.label || child.props.field}</TableCell>
         ))}
       </TableRow>
     </TableHead>
@@ -41,7 +41,7 @@ export const DaoTable: FunctionComponent<IDaoTable> = (props) => {
       {props.values.map((value) => (
         <TableRow>
           {React.Children.map(props.children, (child, index) => (
-            isDaoColumn(child) && <TableCell>{render(child.props.render, value[child.props.field])}</TableCell>
+            isMeColumn(child) && <TableCell>{render(child.props.render, value[child.props.field])}</TableCell>
           ))}
         </TableRow>
       ))}
@@ -49,21 +49,21 @@ export const DaoTable: FunctionComponent<IDaoTable> = (props) => {
   </Table>;
 };
 
-export const ReflectiveDaoTable: FunctionComponent<IDaoTable> = (props) => {
+export const MeAutoTable: FunctionComponent<IMeTable> = (props) => {
   const addAll = <T extends {}>(set: Set<T>, ...values: T[]) => values.reduce((res, value) => res.add(value), set);
   const columns: Set<string> = props.values.reduce((set, value) => addAll(set, ...Object.keys(value)), new Set());
 
   const override = new Map(React.Children.toArray(props.children)
-    .filter(isDaoColumn)
+    .filter(isMeColumn)
     .map((child) => [child.props.field, child]));
 
-  return <DaoTable values={props.values}>
+  return <MeTable values={props.values}>
     {Array.from(columns.keys()).map((column) =>
-      override.has(column) ? override.get(column) : <DaoColumn field={column} />,
+      override.has(column) ? override.get(column) : <MeColumn field={column} />,
     )}
-  </DaoTable>;
+  </MeTable>;
 };
 
-function isDaoColumn(node: React.ReactNode): node is ReactElement<IDaoColumn> {
-  return React.isValidElement(node) && node.type === DaoColumn;
+function isMeColumn(node: React.ReactNode): node is ReactElement<IMeColumn> {
+  return React.isValidElement(node) && node.type === MeColumn;
 }

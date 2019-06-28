@@ -1,9 +1,9 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import { DaoColumn, DaoTable, ReflectiveDaoTable } from "../lib/daotable";
+import { MeColumn, MeTable } from "../lib/table";
 import assertRendering from "./assert";
 
-test("DaoTable renders", () => {
+test("MeTable renders", () => {
   const data = [
     { first: 1, second: "first row", third: true, four: 10.1 },
     { first: 2, second: "second row", third: false, four: 22.2 },
@@ -11,12 +11,12 @@ test("DaoTable renders", () => {
   ];
 
   const output = renderer.create(
-    <DaoTable values={data}>
-      <DaoColumn label="Column #1" field="first" />
-      <DaoColumn label="Column #2" field="second" />
-      <DaoColumn label="Column #3" field="third" />
-      <DaoColumn label="Column #4" field="four" />
-    </DaoTable>,
+    <MeTable values={data}>
+      <MeColumn label="Column #1" field="first" />
+      <MeColumn label="Column #2" field="second" />
+      <MeColumn label="Column #3" field="third" />
+      <MeColumn label="Column #4" field="four" />
+    </MeTable>,
   ).toJSON()!;
 
   assertRendering(output,
@@ -31,7 +31,7 @@ test("DaoTable renders", () => {
   );
 });
 
-test("DaoTable overrides", () => {
+test("MeTable overrides", () => {
   const data = [
     { first: 1, second: "first row", third: true, four: 10.1 },
     { first: 2, second: "second row", third: false, four: 22.2 },
@@ -39,14 +39,14 @@ test("DaoTable overrides", () => {
   ];
 
   const output = renderer.create(
-    <DaoTable values={data}>
-      <DaoColumn label="Column #1" field="first" />
-      <DaoColumn label="Column #2" field="second" render={(value) => `"${value}"`} />
-      <DaoColumn label="Column #3" field="third" />
-      <DaoColumn label="Column #4" field="four" render={(value) =>
+    <MeTable values={data}>
+      <MeColumn label="Column #1" field="first" />
+      <MeColumn label="Column #2" field="second" render={(value) => `"${value}"`} />
+      <MeColumn label="Column #3" field="third" />
+      <MeColumn label="Column #4" field="four" render={(value) =>
         <b>{value}</b>
       }/>
-    </DaoTable>,
+    </MeTable>,
   ).toJSON()!;
 
   assertRendering(output,

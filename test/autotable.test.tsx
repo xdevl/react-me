@@ -1,16 +1,16 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import { DaoColumn, ReflectiveDaoTable } from "../lib/daotable";
+import { MeColumn, MeAutoTable } from "../lib/table";
 import assertRendering from "./assert";
 
-test("ReflectiveDaoTable renders", () => {
+test("MeAutoTable renders", () => {
   const data = [
     { first: 1, second: "first row", third: true, four: 10.1 },
     { first: 2, second: "second row", third: false, four: 22.2 },
     { first: 3, second: "third row", third: true, four: 30.3 },
   ];
 
-  const output = renderer.create(<ReflectiveDaoTable values={data} />).toJSON()!;
+  const output = renderer.create(<MeAutoTable values={data} />).toJSON()!;
 
   assertRendering(output,
     <table>
@@ -24,7 +24,7 @@ test("ReflectiveDaoTable renders", () => {
   );
 });
 
-test("ReflectiveDaoTable overrides", () => {
+test("MeAutoTable overrides", () => {
   const data = [
     { first: 1, second: "first row", third: true, four: 10.1 },
     { first: 2, second: "second row", third: false, four: 22.2 },
@@ -32,12 +32,12 @@ test("ReflectiveDaoTable overrides", () => {
   ];
 
   const output = renderer.create(
-    <ReflectiveDaoTable values={data}>
-      <DaoColumn label="Column #1" field="first" render={(value) => `${value * value}`}/>
-      <DaoColumn label="Column #3" field="third" render={(value) =>
+    <MeAutoTable values={data}>
+      <MeColumn label="Column #1" field="first" render={(value) => `${value * value}`}/>
+      <MeColumn label="Column #3" field="third" render={(value) =>
           <span><i>{value ? "true" : "false"}</i></span>
       }/>
-    </ReflectiveDaoTable>
+    </MeAutoTable>
   ).toJSON()!;
 
   assertRendering(output,
@@ -52,14 +52,14 @@ test("ReflectiveDaoTable overrides", () => {
   );
 });
 
-test("ReflectiveDaoTable merges all columns", () => {
+test("MeAutoTable merges all columns", () => {
   const data = [
     { first: 1, second: "first row"},
     { first: 2, third: false, four: 22.2 },
     { second: "third row", third: true },
   ];
 
-  const output = renderer.create(<ReflectiveDaoTable values={data} />).toJSON()!;
+  const output = renderer.create(<MeAutoTable values={data} />).toJSON()!;
 
   assertRendering(output,
     <table>
