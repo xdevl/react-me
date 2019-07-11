@@ -1,8 +1,8 @@
 {
   "name": "react-me",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Enhanced components for react",
-  "main": "dist/table.js",
+  "main": "dist/index.js",
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc --declaration",
