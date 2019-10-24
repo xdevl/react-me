@@ -108,7 +108,7 @@ export const MeRouterContext = React.createContext<IMeRouterContext>({
 const MeRouterContextProvider: FunctionComponent<{}> = (props) => {
     const [location, setLocation] = useState(window.location.pathname);
 
-    window.onpopstate = (event) => setLocation(window.location.pathname);
+    window.onpopstate = () => setLocation(window.location.pathname);
 
     return (<MeRouterContext.Provider value={{
       location,
