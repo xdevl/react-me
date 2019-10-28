@@ -84,6 +84,35 @@ It is possible to customise column's headers and how cells are being rendered by
 ]} />
 ```
 
+## Select
+
+The select components define a concise interface in order to easily pick one or multiple entries from a pre-defined list of objects. Given the following list of products for example:
+
+```javascript
+const products = [
+    { name: "Apple", id: 345768 },
+    { name: "Orange", id: 287456 },
+    { name: "Pear", id: 124632 },
+  ];
+```
+
+### Single
+
+```javascript
+<SingleSelect options={products} value={products[0]}
+  getKey={(product) => String(product.id)}
+  getLabel={(product) => product.name}
+  onChange={(product) => alert("You've selected: " + product.name)} />
+```
+
+### Multiple
+```javascript
+<MultipleSelect options={products} value={[products[0], products[1]]}
+  getKey={(product) => String(product.id)}
+  getLabel={(product) => product.name}
+  onChange={(products) => alert("You've selected: " + products.map((product) => product.name).join(","))} />
+```
+
 ## License
 This software is licensed under the [MIT license](LICENSE)
 

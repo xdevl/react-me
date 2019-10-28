@@ -4,4 +4,5 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 export * from "./router";
+export * from "./select";
 export * from "./table";
