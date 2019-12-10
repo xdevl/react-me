@@ -10,6 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select, {SelectClassKey, SelectProps} from "@material-ui/core/Select";
 import React, {useState} from "react";
+import {Flex} from "./layout";
 
 const defaultEmptyMessage = "Select...";
 
@@ -61,10 +62,11 @@ export const MultipleSelect = <T, >(properties: ISelect<T, T[]>) => {
     return <Select {...selectProps} value={selection} multiple
             onChange={(event) => onChange((event.target.value as string[]).map((key) => map.get(key)!))}
             onOpen={loadOptions}
-            renderValue={(selected) => (selected as string[]).length > 0 ? <React.Fragment>
-                {(selected as string[]).map((key) =>
+            renderValue={(selected) => (selected as string[]).length > 0 ?
+                <Flex flexDirection="row" flexGap="0.5em" flexWrap="wrap">
+                    {(selected as string[]).map((key) =>
                     <Chip key={key} label={getLabel(map.get(key)!)} style={{marginRight: "1em"}} />)}
-            </React.Fragment> : selectProps.displayEmpty && (emptyMessage || defaultEmptyMessage)}>
+                </Flex> : selectProps.displayEmpty && (emptyMessage || defaultEmptyMessage)}>
         <MenuItem value="" disabled>{emptyMessage || defaultEmptyMessage}</MenuItem>
         {Array.from(map.entries()).map(([key, option]) => (
             <MenuItem key={key} value={key}>
