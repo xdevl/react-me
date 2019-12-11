@@ -21,7 +21,7 @@ interface IMeRouter {
 
 export const MeRouter: FunctionComponent<IMeRouter> = (props) => {
   const context = useContext(MeRouterContext);
-  const location = props.subPath ? props.subPath : context.location;
+  const location = props.subPath ? props.subPath : context.getLocation();
   const match = React.Children.toArray(props.children).filter(isRoute)
     .find((route) => route.props.path.capture(location) != null);
 
@@ -94,27 +94,30 @@ export class MePath<U = {}> {
 }
 
 interface IMeRouterContext {
-    location: string;
+    getLocation(): string;
     route(path: string): void;
   }
 
 export const MeRouterContext = React.createContext<IMeRouterContext>({
-    location: "default location",
+    getLocation: () => window.location.pathname,
     route: (path: string) => {
       throw new Error("Component should be a children of <Router>");
     },
 });
 
 const MeRouterContextProvider: FunctionComponent<{}> = (props) => {
-    const [location, setLocation] = useState(window.location.pathname);
+    const [render, setRender] = useState(0);
+    const forceUpdate = () => setRender((accumulator) => accumulator + 1);
 
-    window.onpopstate = () => setLocation(window.location.pathname);
+    window.onpopstate = forceUpdate;
 
     return (<MeRouterContext.Provider value={{
-      location,
+      getLocation: () => window.location.pathname,
       route: (path: string) => {
-        history.pushState({}, "", path);
-        setLocation(window.location.pathname);
+        if (path !== window.location.pathname) {
+          history.pushState({}, "", path);
+        }
+        forceUpdate();
       },
     }}>
       {props.children}

@@ -1,10 +1,10 @@
 import React from "react";
 import renderer from "react-test-renderer";
 import {MePath, MeRoute, MeRouter, MeRouterContext} from "../lib/router";
-import assertRendering, {dumpRendering} from "./assert";
+import assertRendering from "./assert";
 
 const withMock = (location: string, element: JSX.Element) => {
-    return (<MeRouterContext.Provider value={{location, route: (path) => {}}}>
+    return (<MeRouterContext.Provider value={{getLocation: () => location, route: (path) => {}}}>
         {element}
     </MeRouterContext.Provider>);
 }
