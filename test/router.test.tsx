@@ -9,19 +9,47 @@ const withMock = (location: string, element: JSX.Element) => {
     </MeRouterContext.Provider>);
 }
 
-test("Matches simple route", () => {
-    const output = renderer.create(withMock("/secondview",
-        <MeRouter>
-            <MeRoute path={new MePath("firstview")} render={() => 
-                <h1>First View</h1>
-            }/>
-            <MeRoute path={new MePath("secondview")} render={() => 
-                <h1>Second View</h1>
-            }/>
-            <MeRoute path={new MePath("thirdview")} render={() => 
-                <h1>Third View</h1>
-            }/>
-        </MeRouter>
+test("Route can capture", () => {
+    const {str, num} = MePath;
+    const params = new MeRoute(MePath.then("view").then(str("type")), num("id"))
+        .capture("/view/car/123456");
+
+    expect(params!!.type).toEqual("car");
+    expect(params!!.id).toEqual(123456);
+});
+
+test("Route captures with missing optional param", () => {
+    const {str, num} = MePath;
+    const params = new MeRoute(MePath.then("view").then(str("type")), num("id"))
+        .capture("/view/car");
+
+    expect(params!!.type).toEqual("car");
+    expect(params!!.id).toBeUndefined();
+});
+
+test("Route formats", () => {
+    const {str, num} = MePath;
+    const value = new MeRoute(MePath.then("view").then(str("type")), num("id"))
+        .format({type: "truck"}, {id: 1989});
+
+    expect(value).toEqual("/view/truck/1989");
+});
+
+test("Route formats with missing optional param", () => {
+    const {str, num} = MePath;
+    const value = new MeRoute(MePath.then("view").then(str("type")), num("id"))
+        .format({type: "truck"});
+
+    expect(value).toEqual("/view/truck");
+});
+
+test("Router matches simple route", () => {
+    const output = renderer.create(withMock("/secondview/",
+        <MeRouter routes={[
+            new MeRoute(MePath.then("firstview")).callback(() =>  <h1>First View</h1>),
+            new MeRoute(MePath.then("secondview")).callback(() => <h1>Second View</h1>),
+            new MeRoute(MePath.then("thirdview")).callback(() => <h1>Third View</h1>),
+        ]} />
     )).toJSON()!;
 
     assertRendering(output,
@@ -29,22 +57,19 @@ test("Matches simple route", () => {
     );
 });
 
-test("Matches route with params", () => {
-    const output = renderer.create(withMock("/thirdview/123456789/details/address",
-        <MeRouter>
-            <MeRoute path={new MePath("firstview")} render={() => 
-                <h1>First View</h1>
-            }/>
-            <MeRoute path={new MePath("secondview")} render={() => 
-                <h1>Second View</h1>
-            }/>
-            <MeRoute path={new MePath("thirdview").thenNum("id").thenStr("view")} render={(params) => 
+test("Router matches route with params", () => {
+    const {str, num} = MePath;
+    const output = renderer.create(withMock("/thirdview/123456789/details",
+        <MeRouter routes={[
+            new MeRoute(MePath.then("firstview")).callback(() => <h1>First View</h1>),
+            new MeRoute(MePath.then("secondview")).callback(() => <h1>Second View</h1>),
+            new MeRoute(MePath.then("thirdview").then(num("id")).then(str("view"))).callback((params) =>
                 <div>
                     <h1>{params.view}</h1>
                     <span>{params.id}</span>
                 </div>
-            }/>
-        </MeRouter>
+            ),
+        ]} />
     )).toJSON()!;
 
     assertRendering(output,
@@ -55,16 +80,13 @@ test("Matches route with params", () => {
     );
 });
 
-test("Matches not found", () => {
-    const output = renderer.create(withMock("/",
-        <MeRouter>
-            <MeRoute path={new MePath("home")} render={() => 
-                <h1>Welcome</h1>
-            }/>
-            <MeRoute path={new MePath().thenSubPath("subPath")} render={() => 
-                <h1>Not Found</h1>
-            }/>
-        </MeRouter>
+test("Router matches not found", () => {
+    const {path} = MePath;
+    const output = renderer.create(withMock("/abcdef",
+        <MeRouter routes={[
+            new MeRoute(MePath.then("home")).callback(() => <h1>Welcome</h1>),
+            new MeRoute(MePath.then(path("path"))).callback(() => <h1>Not Found</h1>),
+        ]} />
     )).toJSON()!;
 
     assertRendering(output,
@@ -72,17 +94,17 @@ test("Matches not found", () => {
     );
 });
 
-test("Subrouting", () => {
+test("Router subroutes", () => {
+    const {str, path} = MePath;
     const output = renderer.create(withMock("/mainView/subView1/subView2",
-        <MeRouter>
-            <MeRoute path={new MePath("mainView").thenSubPath("path")} render={(params) => 
-                <MeRouter subPath={params.path}>
-                    <MeRoute path={new MePath("subView1").thenStr("view")} render={(subparams) =>
-                        <h1>{subparams.view}</h1>
-                    }/>
-                </MeRouter>
-            }/>
-        </MeRouter>
+        <MeRouter routes={[
+            new MeRoute(MePath.then("mainView").then(path("path"))).callback((params) =>
+                <MeRouter path={"/" + params.path} routes={[
+                    new MeRoute(MePath.then("subView1").then(str("view")))
+                        .callback((subparams) => <h1>{subparams.view}</h1>),
+                ]} />
+            )
+        ]} />
     )).toJSON()!;
 
     assertRendering(output,

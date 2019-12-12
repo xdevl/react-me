@@ -13,49 +13,67 @@ ReactDOM.render(withMeRouter(<App />), document.querySelector("#root"));
 ```
 
 Then, simple routing can easily be achieved as shown in the code snippet below
+```javascript
+const Routes = (({none, path}) => {
+  login: new MeRoute(MePath.then("login")),
+  home: new MeRoute(MePath.then("public").then("home")),
+  notFound: new MeRoute(none, path("path")),
+})(MePath);
 
-```html
-<MeRouter>
-  <MeRoute path={new MePath("login")} render={() =>
-    <h1>Login</h1>
-  }/>
-  <MeRoute path={new MePath("public").then("home")} render={() =>
-    <h1>Home</h1>
-  }/>
-  <MeRoute path={new MePath().thenSubPath("subPath")} render={() =>
-    <h1>Not found</h1>
-  }/>
-</MeRouter>
+<MeRouter routes = {[
+  Routes.login.callback(() => <h1>Login</h1>),
+  Routes.home.callback(() => <h1>Home</h1>),
+  Routes.notFound.callback(() => <h1>Not Found</h1>),
+]} />
 ```
 
-The routing classes support the capture of parameters and leverage the full power of typescript to enforce strict naming and typing checks:
-```html
-<MeRouter>
-  <MeRoute path={new MePath("user").thenNum("id").thenStr("view")} render={(params) => 
-    <div>{params.id} / {params.view}</div>
-  }/>
-</MeRouter>
+The routing classes support the capture of parameters and leverage the full power of typescript to enforce strict naming and type checks:
+```javascript
+const Routes = (({num, str}) => {
+  userView: new MeRoute(MePath.then("user").then(num("id")).then(str("view")))
+})(MePath);
+
+<MeRouter routes = {[
+  Routes.userView.callback((params) => <div>{params.id} / {params.view}</div>),
+]} />
 
 ```
 
-Nested routing can also be achieved using the subPath parameter capture:
-```html
-<MeRouter>
-  <MeRoute path={new MePath("admin").thenSubPath("subPath")} render={(params) =>
-    <!-- Nested admin routing -->
-    <MeRouter subPath={params.subPath}>
-      <MeRoute path={new MePath("list").then("all")} render={(params) =>
-        <!-- User list here... -->
-      }/>
-      <MeRoute path={new MePath("edit").thenNum("userID")} render={(params) =>
-        <!-- User form here... -->
-      }/>
-    </MeRouter>
-  }/>
-  <MeRoute path={new MePath().thenSubPath("subPath")} render={() =>
-    <h1>Not found</h1>
-  }/>
-</MeRouter>
+Nested routing can also be achieved as shown below:
+```javascript
+const Routes = (({num, path}) => {
+  admin: new MeRoute(MePath.then("admin"), path("path")),
+  list: new MeRoute(MePath.then("list").then("all")),
+  edit: new MeRoute(MePath.then("edit").then(num("userID"))),
+})(MePath);
+
+<MeRouter routes = {[
+  Routes.admin.callback((params) => 
+    // Nested admin routing 
+    <MeRouter path={`/${params.path || ""}`} routes = {[
+      Routes.list.callback(() =>
+        // User list here...
+      ),
+      Routes.edit.callback((params) =>
+        // User form here...
+      ),
+    ]} />
+  ),
+]} />
+```
+
+Once application routes have been defined, routing to one of them can be easily achieved using the application routing context:
+
+```javascript
+const Routes = (({num}) => ({
+    userDetails: new MeRoute(MePath.then("user").then(num("id")))
+}))(MePath);
+
+const router = useContext(MeRouterContext);
+<button onClick={() =>
+    router.route(Routes.userDetails.format({id: 123456}))}>
+  Click me!
+</button>
 
 ```
 
