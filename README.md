@@ -117,7 +117,7 @@ const products = [
 ### Single
 
 ```javascript
-<SingleSelect options={products} value={products[0]}
+<MeSingleSelect options={products} value={products[0]}
   getKey={(product) => String(product.id)}
   getLabel={(product) => product.name}
   onChange={(product) => alert("You've selected: " + product.name)} />
@@ -125,10 +125,20 @@ const products = [
 
 ### Multiple
 ```javascript
-<MultipleSelect options={products} value={[products[0], products[1]]}
+<MeMultipleSelect options={products} value={[products[0], products[1]]}
   getKey={(product) => String(product.id)}
   getLabel={(product) => product.name}
   onChange={(products) => alert("You've selected: " + products.map((product) => product.name).join(","))} />
+```
+
+## Fader
+This component will automatically run a fade in and out animation whenever one of its direct children changes:
+```javascript
+const [flag, setFlag] = React.useState(true);
+<MeFader>
+  {flag ? <h1>A view</h1> : <h1> Another view</h1>}
+  <button onClick={() => setFlag((old) => !old)}>Click me!</button>
+</MeFader>
 ```
 
 ## License

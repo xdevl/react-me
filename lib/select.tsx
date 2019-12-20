@@ -10,7 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select, {SelectClassKey, SelectProps} from "@material-ui/core/Select";
 import React, {useState} from "react";
-import {Flex} from "./layout";
+import {MeFlex} from "./layout";
 
 const defaultEmptyMessage = "Select...";
 
@@ -18,7 +18,7 @@ type Options<T> = T[] | (() => Promise<T[]>);
 
 const promisify = <T, >(options: Options<T>) => options instanceof Function ? options() : Promise.resolve(options);
 
-interface ISelect<T, V> extends StandardProps<SelectProps, SelectClassKey, "value"|"onChange"|"onOpen"> {
+interface IMeSelect<T, V> extends StandardProps<SelectProps, SelectClassKey, "value"|"onChange"|"onOpen"> {
     options: Options<T>;
     value?: V;
     getKey: (item: T) => string;
@@ -27,7 +27,7 @@ interface ISelect<T, V> extends StandardProps<SelectProps, SelectClassKey, "valu
     emptyMessage?: string;
 }
 
-export const SingleSelect = <T, >(properties: ISelect<T, T>) => {
+export const MeSingleSelect = <T, >(properties: IMeSelect<T, T>) => {
 
     const {options, value, getKey, getLabel, onChange, emptyMessage, ...selectProps} = properties;
     const [optionValues, setOptionValues] = useState(options instanceof Array ? options : []);
@@ -48,7 +48,7 @@ export const SingleSelect = <T, >(properties: ISelect<T, T>) => {
     </Select>;
 };
 
-export const MultipleSelect = <T, >(properties: ISelect<T, T[]>) => {
+export const MeMultipleSelect = <T, >(properties: IMeSelect<T, T[]>) => {
 
     const {options, value, getKey, getLabel, onChange, emptyMessage, ...selectProps} = properties;
     const [optionValues, setOptionValues] = useState(options instanceof Array ? options : []);
@@ -63,10 +63,10 @@ export const MultipleSelect = <T, >(properties: ISelect<T, T[]>) => {
             onChange={(event) => onChange((event.target.value as string[]).map((key) => map.get(key)!))}
             onOpen={loadOptions}
             renderValue={(selected) => (selected as string[]).length > 0 ?
-                <Flex flexDirection="row" flexGap="0.5em" flexWrap="wrap">
+                <MeFlex flexDirection="row" flexGap="0.5em" flexWrap="wrap">
                     {(selected as string[]).map((key) =>
                     <Chip key={key} label={getLabel(map.get(key)!)} style={{marginRight: "1em"}} />)}
-                </Flex> : selectProps.displayEmpty && (emptyMessage || defaultEmptyMessage)}>
+                </MeFlex> : selectProps.displayEmpty && (emptyMessage || defaultEmptyMessage)}>
         <MenuItem value="" disabled>{emptyMessage || defaultEmptyMessage}</MenuItem>
         {Array.from(map.entries()).map(([key, option]) => (
             <MenuItem key={key} value={key}>
