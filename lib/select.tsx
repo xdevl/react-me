@@ -16,9 +16,9 @@ const defaultEmptyMessage = "Select...";
 
 type Options<T> = T[] | (() => Promise<T[]>);
 
-const promisify = <T, >(options: Options<T>) => options instanceof Function ? options() : Promise.resolve(options);
+const promisify = <T, >(options: Options<T>): Promise<T[]> => options instanceof Function ? options() : Promise.resolve(options);
 
-interface IMeSelect<T, V> extends StandardProps<SelectProps, SelectClassKey, "value"|"onChange"|"onOpen"> {
+interface MeSelectProps<T, V> extends StandardProps<SelectProps, SelectClassKey, "value"|"onChange"|"onOpen"> {
     options: Options<T>;
     value?: V;
     getKey: (item: T) => string;
@@ -27,11 +27,11 @@ interface IMeSelect<T, V> extends StandardProps<SelectProps, SelectClassKey, "va
     emptyMessage?: string;
 }
 
-export const MeSingleSelect = <T, >(properties: IMeSelect<T, T>) => {
+export const MeSingleSelect = <T, >(properties: MeSelectProps<T, T>): JSX.Element => {
 
     const {options, value, getKey, getLabel, onChange, emptyMessage, ...selectProps} = properties;
     const [optionValues, setOptionValues] = useState(options instanceof Array ? options : []);
-    const loadOptionValues = () => {
+    const loadOptionValues = (): void => {
         promisify(options).then((result) => setOptionValues(result));
     };
 
@@ -48,11 +48,11 @@ export const MeSingleSelect = <T, >(properties: IMeSelect<T, T>) => {
     </Select>;
 };
 
-export const MeMultipleSelect = <T, >(properties: IMeSelect<T, T[]>) => {
+export const MeMultipleSelect = <T, >(properties: MeSelectProps<T, T[]>): JSX.Element => {
 
     const {options, value, getKey, getLabel, onChange, emptyMessage, ...selectProps} = properties;
     const [optionValues, setOptionValues] = useState(options instanceof Array ? options : []);
-    const loadOptions = () => {
+    const loadOptions = (): void => {
         promisify(options).then((result) => setOptionValues(result));
     };
 
@@ -70,7 +70,7 @@ export const MeMultipleSelect = <T, >(properties: IMeSelect<T, T[]>) => {
         <MenuItem value="" disabled>{emptyMessage || defaultEmptyMessage}</MenuItem>
         {Array.from(map.entries()).map(([key, option]) => (
             <MenuItem key={key} value={key}>
-                <Checkbox checked={selection.indexOf(key) >= 0} />
+                <Checkbox checked={selection.includes(key)} />
                 <ListItemText primary={getLabel(option)} />
             </MenuItem>
         ))}

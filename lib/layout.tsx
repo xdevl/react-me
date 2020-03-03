@@ -7,11 +7,11 @@ import Fade from "@material-ui/core/Fade";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import {AlignContentProperty, AlignItemsProperty, FlexDirectionProperty,
     FlexWrapProperty, JustifyContentProperty} from "csstype";
-import React, {FunctionComponent, ReactNode, useState} from "react";
+import React, {PropsWithChildren, ReactNode, useState} from "react";
 
 type DivProperties = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-interface IMeFlex {
+interface MeFlexProps {
     alignContent?: AlignContentProperty;
     alignItems?: AlignItemsProperty;
     flexDirection: FlexDirectionProperty;
@@ -20,7 +20,7 @@ interface IMeFlex {
     flexWrap?: FlexWrapProperty;
 }
 
-const useStyles = makeStyles<Theme, IMeFlex>({
+const useStyles = makeStyles<Theme, MeFlexProps>({
     flex: (properties) => {
         const {flexGap, ...styles} = properties;
         return {
@@ -33,7 +33,7 @@ const useStyles = makeStyles<Theme, IMeFlex>({
     },
 });
 
-export const MeFlex: FunctionComponent<IMeFlex & DivProperties> = (properties) => {
+export const MeFlex = (properties: PropsWithChildren<MeFlexProps & DivProperties>): JSX.Element => {
     const {alignContent, alignItems, children, flexDirection, justifyContent,
         flexGap, flexWrap, ...wrapperProps} = properties;
     const classes = useStyles({alignContent, alignItems, flexDirection, justifyContent, flexGap, flexWrap});
@@ -42,10 +42,14 @@ export const MeFlex: FunctionComponent<IMeFlex & DivProperties> = (properties) =
     </div>;
 };
 
-export const MeWrapper: FunctionComponent<{ wrap: (child: ReactNode) => ReactNode}> =
-    (props) => <React.Fragment>{React.Children.map(props.children, (child) => props.wrap(child))}</React.Fragment>;
+interface MeWrapperProps {
+    wrap: (child: ReactNode) => ReactNode;
+}
 
-export const MeFader: FunctionComponent<DivProperties> = (props) => {
+export const MeWrapper = (props: PropsWithChildren<MeWrapperProps>): JSX.Element =>
+    <React.Fragment>{React.Children.map(props.children, (child) => props.wrap(child))}</React.Fragment>;
+
+export const MeFader = (props: PropsWithChildren<DivProperties>): JSX.Element => {
     const [children, setChildren] = useState(props.children);
     return <Fade in={props.children === children} unmountOnExit
         appear={false} onExited={() => setChildren(props.children)}>
