@@ -77,6 +77,17 @@ const router = useContext(MeRouterContext);
 
 ```
 
+## Flow
+This component let's you chain multiple components all together to easily pass data from one to another
+```javascript
+const MyForm = new MeFlow<number>()
+        .then<number>((value, next) => <div onClick={() => next(String(value * 2))}>I am {value}, click to double me</div>)
+        .then<string>((value, next, previous) => <div onClick={() => previous(Number(value) / 2)}>I am {value}, click to half me</div>)
+        .render(8);
+
+<MyForm />
+
+```
 
 ## Table
 This component simplifies the creation of tables which is usually quite verbose. From the following given data set for example:
