@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2020 XdevL. All rights reserved.
+ * This work is licensed under the terms of the MIT license.
+ * For a copy, see <https://opensource.org/licenses/MIT>.
+ */
 export const meTimeout = async (value: number): Promise<void> => new Promise((resolve) => {
     setTimeout(resolve, value);
 });
