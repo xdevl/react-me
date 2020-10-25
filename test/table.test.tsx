@@ -11,7 +11,8 @@ test("MeTable renders", () => {
   ];
 
   const output = renderer.create(
-    <MeTable values={data} columns={columnsFrom("first", "second", "third", "fourth")} />).toJSON()!;
+      <MeTable values={data} columns={columnsFrom("first", "second", "third", "fourth")} />
+    ).toJSON() as renderer.ReactTestRendererNode;
 
   assertRendering(output,
     <table>
@@ -38,7 +39,7 @@ test("MeTable custom rendering", () => {
       {label: "Column #2", render: (value) => `"${value.second}"`},
       {label: "Column #3", render: renderField("third")},
       {label: "Column #4", render: (value) => <b>{value.fourth}</b>}
-    ]} />).toJSON()!;
+    ]} />).toJSON() as renderer.ReactTestRendererNode;
 
   assertRendering(output,
     <table>

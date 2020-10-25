@@ -50,7 +50,7 @@ test("Router matches simple route", () => {
             new MeRoute(MePath.then("secondview")).callback(() => <h1>Second View</h1>),
             new MeRoute(MePath.then("thirdview")).callback(() => <h1>Third View</h1>),
         ]} />
-    )).toJSON()!;
+    )).toJSON() as renderer.ReactTestRendererNode;
 
     assertRendering(output,
         <h1>Second View</h1>
@@ -70,7 +70,7 @@ test("Router matches route with params", () => {
                 </div>
             ),
         ]} />
-    )).toJSON()!;
+    )).toJSON() as renderer.ReactTestRendererNode;
 
     assertRendering(output,
         <div>
@@ -87,7 +87,7 @@ test("Router matches not found", () => {
             new MeRoute(MePath.then("home")).callback(() => <h1>Welcome</h1>),
             new MeRoute(MePath.then(path("path"))).callback(() => <h1>Not Found</h1>),
         ]} />
-    )).toJSON()!;
+    )).toJSON() as renderer.ReactTestRendererNode;
 
     assertRendering(output,
         <h1>Not Found</h1>
@@ -105,7 +105,7 @@ test("Router subroutes", () => {
                 ]} />
             )
         ]} />
-    )).toJSON()!;
+    )).toJSON() as renderer.ReactTestRendererNode;
 
     assertRendering(output,
         <h1>subView2</h1>

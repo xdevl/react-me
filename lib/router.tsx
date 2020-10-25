@@ -148,20 +148,23 @@ export const MeRouter: FunctionComponent<MeRouterProps> = (props) => {
   return null;
 };
 
-const MeRouterContextProvider = (props: PropsWithChildren<{}>): JSX.Element => {
-    const [, setRender] = useState(0);
-    const forceUpdate = (): void => setRender((accumulator) => accumulator + 1);
+const updateWindowLocation = (path: string): string => {
+  if (window.location.origin === "file://") {
+    window.location.hash = path;
+  } else if (window.location.pathname != path) {
+      history.pushState({}, "", path);
+  }
+  return path;
+}
 
-    window.onpopstate = forceUpdate;
+const MeRouterContextProvider = (props: PropsWithChildren<{}>): JSX.Element => {
+    const [location, setLocation] = useState(window.location.pathname)
+
+    window.onpopstate = () => setLocation(window.location.pathname);
 
     return <MeRouterContext.Provider value={{
-      getLocation: () => window.location.pathname,
-      route: (path: string) => {
-        if (path !== window.location.pathname) {
-          history.pushState({}, "", path);
-        }
-        forceUpdate();
-      },
+      getLocation: () => location,
+      route: (path: string) => setLocation(updateWindowLocation(path)),
     }}>
       {props.children}
     </MeRouterContext.Provider>;
