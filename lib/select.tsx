@@ -120,7 +120,7 @@ export const MeSelect = <T, M extends Bool = false, O extends Bool = false>(prop
                 onChange={(event) => onChange(adapter.map(event.target.value as Value<string, M, O>, (key) => optionsMap.get(key)!))}
                 renderValue={(selected) => (renderValue || adapter.renderValue)(adapter.map(selected as Value<string, M, O>, (key) => optionsMap.get(key)!))}>
                     {optionsMap.size == 0 && <MenuItem key="" value="" disabled>{noOptionLabel || defaultNoOptionLabel}</MenuItem>}
-                    {optionsMap.size > 0 && optional && <MenuItem key="" value="" disabled>{noValueLabel || defaultNoValueLabel}</MenuItem>}
+                    {optionsMap.size > 0 && optional && <MenuItem key="" value="">{noValueLabel || defaultNoValueLabel}</MenuItem>}
                     {Array.from(optionsMap.entries())
                         .map(([key, option]) => adapter.renderOption(key, option, selection.includes(key)))}
             </Select>
