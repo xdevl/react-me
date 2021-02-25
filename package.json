@@ -1,6 +1,6 @@
 {
   "name": "react-me",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Enhanced components for react",
   "main": "dist/index.js",
   "scripts": {

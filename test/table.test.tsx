@@ -38,16 +38,17 @@ test("MeTable custom rendering", () => {
       {label: "Column #1", render: renderField("first")},
       {label: "Column #2", render: (value) => `"${value.second}"`},
       {label: "Column #3", render: renderField("third")},
-      {label: "Column #4", render: (value) => <b>{value.fourth}</b>}
+      {label: "Column #4", render: (value) => <b>{value.fourth}</b>},
+      {label: "Column #5", render: (_, index) => <span>{index}</span>}
     ]} />).toJSON() as renderer.ReactTestRendererNode;
 
   assertRendering(output,
     <table>
-      <thead><tr><th>Column #1</th><th>Column #2</th><th>Column #3</th><th>Column #4</th></tr></thead>
+      <thead><tr><th>Column #1</th><th>Column #2</th><th>Column #3</th><th>Column #4</th><th>Column #5</th></tr></thead>
       <tbody>
-      <tr><td>1</td><td>"first row"</td><td>true</td><td><b>10.1</b></td></tr>
-      <tr><td>2</td><td>"second row"</td><td>false</td><td><b>22.2</b></td></tr>
-      <tr><td>3</td><td>"third row"</td><td>true</td><td><b>30.3</b></td></tr>
+      <tr><td>1</td><td>"first row"</td><td>true</td><td><b>10.1</b></td><td><span>0</span></td></tr>
+      <tr><td>2</td><td>"second row"</td><td>false</td><td><b>22.2</b></td><td><span>1</span></td></tr>
+      <tr><td>3</td><td>"third row"</td><td>true</td><td><b>30.3</b></td><td><span>2</span></td></tr>
       </tbody>
     </table>,
   );

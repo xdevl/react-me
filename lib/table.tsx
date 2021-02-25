@@ -10,7 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React, {ReactElement} from "react";
 
-type Renderer<T> = (value: T) => string | ReactElement;
+type Renderer<T> = (value: T, index: number) => string | ReactElement;
 
 interface MeColumn<T> {
   label: string;
@@ -39,7 +39,7 @@ export const MeTable = <T, >(props: MeTableProps<T>): JSX.Element => {
     <TableBody>
       {props.values.map((value, rowIndex) => (
         <TableRow key={rowIndex}>
-          {props.columns.map((column, cellIndex) => <TableCell key={cellIndex}>{column.render(value)}</TableCell>)}
+          {props.columns.map((column, cellIndex) => <TableCell key={cellIndex}>{column.render(value, rowIndex)}</TableCell>)}
         </TableRow>
       ))}
     </TableBody>

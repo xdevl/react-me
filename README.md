@@ -108,7 +108,7 @@ One can create a table as simply as:
 It is possible to customise column's headers and how cells are being rendered by defining each column indvidually as shown below:
 ```javascript
 <MeTable values={people} columns={[
-  {label: "Full Name", render: (person) => <span>{person.name} {person.surname}</span>},
+  {label: "Full Name", render: (person, index) => <span> #{index}: {person.name} {person.surname}</span>},
   {label: "Age", render: renderField("age")},
 ]} />
 ```
