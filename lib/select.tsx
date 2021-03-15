@@ -98,7 +98,6 @@ interface MeSelectProps<T, M extends Bool, O extends Bool> extends StandardProps
 export const MeSelect = <T, M extends Bool = false, O extends Bool = false>(props: MeSelectProps<T, M, O>): JSX.Element => {
     const {optional, options, value, getKey, getLabel, onChange, loadingLabel,
         noValueLabel, noOptionLabel, renderValue, ...selectProps} = props;
-    const [initialValue] = useState(value);
     const [optionValues, setOptionValues] = useState(options instanceof Array ? options : []);
     const [state, setState] = useState({open: false, loading: false});
     const ref = React.useRef<Element>(null);
@@ -110,7 +109,7 @@ export const MeSelect = <T, M extends Bool = false, O extends Bool = false>(prop
 
     const adapter = (props.multiple ? meMultipleAdapter(props as MeSelectProps<T, true, true>)
         : meSingleAdapter(props as MeSelectProps<T, false, O>)) as MeSelectAdapter<T, M>;
-    const optionsMap = new Map(optionValues.concat(adapter.valueArray(initialValue)).map((option) => [getKey(option), option]));
+    const optionsMap = new Map(optionValues.concat(adapter.valueArray(value)).map((option) => [getKey(option), option]));
     const selection = adapter.valueArray(value).map((option) => getKey(option));
 
     return <React.Fragment>

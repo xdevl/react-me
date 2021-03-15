@@ -71,8 +71,7 @@ test("Select single not in options", async () => {
     expect(await findState()).toBe("one");
 
     await clickOn("one");
-    await clickOnOption("hello");
-    expect(await findState()).toBe("hello");
+    expect(await findOptions()).toStrictEqual(options);
 });
 
 test("Unselect optional value", async () => {
