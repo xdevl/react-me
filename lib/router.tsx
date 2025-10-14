@@ -23,7 +23,7 @@ export class MeSegment<N extends keyof any, T> implements MePathSpec<Record<N, T
   }
 
   public deserialize(values: string[], offset: number): Record<N, T> {
-    return this.capture && values[offset] !== undefined ? {[this.name]: this.converter(values[offset])} : {} as any;
+    return this.capture && values[offset] !== undefined ? {[this.name]: this.converter(values[offset])} as Record<N, T> : {} as any;
   }
 
   public serialize(value: Record<N, T>): string {
@@ -35,7 +35,7 @@ export class MeSegment<N extends keyof any, T> implements MePathSpec<Record<N, T
   }
 
   public toString(): string {
-    return this.capture ? `/:${this.name}` : `/${this.regex}`;
+    return this.capture ? `/:${String(this.name)}` : `/${this.regex}`;
   }
 }
 
@@ -86,9 +86,9 @@ export class MePath<P = {}> implements MePathSpec<P> {
   }
 }
 
-export type RouteRenderer<MP, OP> = [MeRoute<MP, OP>, (params: MP & Partial<OP>) => JSX.Element];
+export type RouteRenderer<MP extends {}, OP> = [MeRoute<MP, OP>, (params: MP & Partial<OP>) => JSX.Element];
 
-export class MeRoute<MP, OP = {}> {
+export class MeRoute<MP extends {}, OP = {}> {
   private readonly regex: RegExp;
   constructor(private readonly mandatory: MePathSpec<MP>, private readonly optional = MePath.none as MePathSpec<OP>) {
     this.regex = new RegExp(`^${this.mandatory.getRegex()}(?:${this.optional.getRegex()})?$`);

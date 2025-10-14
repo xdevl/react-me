@@ -23,12 +23,12 @@ interface MeFlexProps {
 const useStyles = makeStyles<Theme, MeFlexProps>({
     flex: (properties) => {
         const {flexGap, ...styles} = properties;
+        const isRow = properties.flexDirection == "row" || properties.flexDirection == "row-reverse"
         return {
             display: "inline-flex",
             flexGrow: 1,
-            margin: typeof flexGap === "number" ? flexGap * -1 : "-" + flexGap,
             ...styles,
-            ...{"& > *": {margin: flexGap}},
+            ...{"& > :not(:last-child)": isRow ? {marginRight: flexGap} : {marginBottom: flexGap}},
         };
     },
 });

@@ -152,6 +152,12 @@ const [flag, setFlag] = React.useState(true);
 </MeFader>
 ```
 
+## Developing
+You can quickly test changes made to that repo by updating the sample and running:
+```
+npx vite
+```
+
 ## License
 This software is licensed under the [MIT license](LICENSE)
 
