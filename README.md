@@ -153,7 +153,8 @@ const [flag, setFlag] = React.useState(true);
 ```
 
 ## Developing
-You can quickly test changes made to that repo by updating the sample and running:
+You can quickly test changes made to that repo by updating the sample and running the below command
+in order to access it locally from your web browser:
 ```
 npx vite
 ```
