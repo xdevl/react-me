@@ -160,6 +160,7 @@ const updateWindowLocation = (path: string): string => {
 const MeRouterContextProvider = (props: PropsWithChildren<{}>): JSX.Element => {
     const [location, setLocation] = useState(window.location.pathname)
 
+    /* eslint-disable react-hooks/immutability */
     window.onpopstate = () => setLocation(window.location.pathname);
 
     return <MeRouterContext.Provider value={{
