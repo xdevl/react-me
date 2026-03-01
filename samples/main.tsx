@@ -7,7 +7,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { columnsFrom, MeTable, renderField } from "../lib/table";
 import { MeFlex } from "../lib/layout";
-import { red } from "@material-ui/core/colors";
 
 const Main = (): JSX.Element => {
   return <div>
@@ -21,7 +20,7 @@ const Main = (): JSX.Element => {
 }
 
 const HorizontalFlexSample = (): JSX.Element => {
-  return <MeFlex flexDirection="row" alignItems="center" flexGap="0.4em">
+  return <MeFlex flexDirection="row" alignItems="center" flexGap="0.4em" style={{borderStyle: "solid"}}>
     <div style={{width: 200, height: 100, backgroundColor: "red"}}></div>
     <div style={{width: 200, height: 100, backgroundColor: "green"}}></div>
     <div style={{width: 200, height: 100, backgroundColor: "blue"}}></div>
@@ -29,7 +28,7 @@ const HorizontalFlexSample = (): JSX.Element => {
 }
 
 const VerticalFlexSample = (): JSX.Element => {
-  return <MeFlex flexDirection="column" alignItems="center" flexGap="0.4em">
+  return <MeFlex flexDirection="column" alignItems="center" flexGap="0.4em" style={{borderStyle: "solid"}}>
     <div style={{width: 200, height: 100, backgroundColor: "red"}}></div>
     <div style={{width: 200, height: 100, backgroundColor: "green"}}></div>
     <div style={{width: 200, height: 100, backgroundColor: "blue"}}></div>

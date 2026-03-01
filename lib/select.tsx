@@ -3,15 +3,14 @@
  * This work is licensed under the terms of the MIT license.
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
-import {StandardProps} from "@material-ui/core";
-import Checkbox from "@material-ui/core/Checkbox";
-import Chip from "@material-ui/core/Chip";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import ListItemText from "@material-ui/core/ListItemText";
-import MenuItem from "@material-ui/core/MenuItem";
-import Popover from "@material-ui/core/Popover";
-import Select, {SelectClassKey, SelectProps} from "@material-ui/core/Select";
-import Typography from "@material-ui/core/Typography";
+import Checkbox from "@mui/material/Checkbox";
+import Chip from "@mui/material/Chip";
+import CircularProgress from "@mui/material/CircularProgress";
+import ListItemText from "@mui/material/ListItemText";
+import MenuItem from "@mui/material/MenuItem";
+import Popover from "@mui/material/Popover";
+import Select, {BaseSelectProps} from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
 import React, {useState} from "react";
 import {MeFlex} from "./layout";
 import {meLoaderPromise} from "./utils";
@@ -81,7 +80,7 @@ const PopoverLoader = (props: PopoverLoaderProps): JSX.Element => {
     </Popover>;
 };
 
-interface MeSelectProps<T, M extends Bool, O extends Bool> extends StandardProps<SelectProps, SelectClassKey, "value"|"onChange"|"onOpen"|"renderValue"> {
+interface MeSelectProps<T, M extends Bool, O extends Bool> extends Omit<BaseSelectProps, "onChange" | "renderValue"> {
     multiple?: M;
     optional?: O;
     options: Options<T>;
@@ -96,7 +95,7 @@ interface MeSelectProps<T, M extends Bool, O extends Bool> extends StandardProps
 }
 
 export const MeSelect = <T, M extends Bool = false, O extends Bool = false>(props: MeSelectProps<T, M, O>): JSX.Element => {
-    const {optional, options, value, getKey, getLabel, onChange, loadingLabel,
+    const {optional, options, value, getKey, onChange, loadingLabel,
         noValueLabel, noOptionLabel, renderValue, ...selectProps} = props;
     const [optionValues, setOptionValues] = useState(options instanceof Array ? options : []);
     const [state, setState] = useState({open: false, loading: false});

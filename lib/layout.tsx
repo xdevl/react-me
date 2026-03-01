@@ -3,42 +3,37 @@
  * This work is licensed under the terms of the MIT license.
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
-import Fade from "@material-ui/core/Fade";
-import {makeStyles, Theme} from "@material-ui/core/styles";
-import {AlignContentProperty, AlignItemsProperty, FlexDirectionProperty,
-    FlexWrapProperty, JustifyContentProperty} from "csstype";
+import Fade from "@mui/material/Fade";
+import {Property} from "csstype";
 import React, {PropsWithChildren, ReactNode, useState} from "react";
 
 type DivProperties = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 interface MeFlexProps {
-    alignContent?: AlignContentProperty;
-    alignItems?: AlignItemsProperty;
-    flexDirection: FlexDirectionProperty;
-    justifyContent?: JustifyContentProperty;
+    alignContent?: Property.AlignContent;
+    alignItems?: Property.AlignItems;
+    flexDirection: Property.FlexDirection;
+    justifyContent?: Property.JustifyContent;
     flexGap?: number|string;
-    flexWrap?: FlexWrapProperty;
+    flexWrap?: Property.FlexWrap;
 }
 
-const useStyles = makeStyles<Theme, MeFlexProps>({
-    flex: (properties) => {
-        const {flexGap, ...styles} = properties;
-        const isRow = properties.flexDirection == "row" || properties.flexDirection == "row-reverse"
-        return {
-            display: "inline-flex",
-            flexGrow: 1,
-            ...styles,
-            ...{"& > :not(:last-child)": isRow ? {marginRight: flexGap} : {marginBottom: flexGap}},
-        };
-    },
-});
-
 export const MeFlex = (properties: PropsWithChildren<MeFlexProps & DivProperties>): JSX.Element => {
+
     const {alignContent, alignItems, children, flexDirection, justifyContent,
         flexGap, flexWrap, ...wrapperProps} = properties;
-    const classes = useStyles({alignContent, alignItems, flexDirection, justifyContent, flexGap, flexWrap});
-    return <div {...wrapperProps} style={{...wrapperProps.style, display: "inline-flex", flexDirection}}>
-        <div className={classes.flex}>{children}</div>
+
+    return <div {...wrapperProps} style={{...wrapperProps.style, flexWrap: "nowrap", display: "inline-flex", flexDirection}}>
+        <div style={{
+            alignContent: alignContent,
+            alignItems: alignItems,
+            display: "inline-flex",
+            flexDirection: flexDirection,
+            flexGrow: 1,
+            justifyContent: justifyContent,
+            flexWrap: flexWrap,
+            gap: flexGap
+        }}>{children}</div>
     </div>;
 };
 
