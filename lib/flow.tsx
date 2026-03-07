@@ -5,7 +5,7 @@
  */
 import React, {useState} from "react";
 
-type MeRenderer<A, N, P> = (arg: A, next: (value: N) => void, previous: (value: P) => void) => JSX.Element;
+type MeRenderer<A, N, P> = (arg: A, next: (value: N) => void, previous: (value: P) => void) => React.JSX.Element;
 
 interface MeFlowState {
   index: number;
@@ -22,7 +22,7 @@ export class MeFlow<A, N = A, P = A> {
   }
 
   public render(argument: A, next: ((value: N) => void) = () => undefined,
-                previous: ((value: A) => void) = () => undefined): JSX.Element {
+                previous: ((value: A) => void) = () => undefined): React.JSX.Element {
     return React.createElement(() => {
       const [state, setState] = useState({index: 0, value: argument} as MeFlowState);
       const update = (updated: MeFlowState, old: MeFlowState): MeFlowState => {

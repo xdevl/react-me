@@ -1,9 +1,9 @@
 import React from "react";
-import renderer from "react-test-renderer";
+import '@testing-library/jest-dom'
+import {render, screen} from '@testing-library/react'
 import {MePath, MeRoute, MeRouter, MeRouterContext} from "../lib/router";
-import assertRendering from "./assert";
 
-const withMock = (location: string, element: JSX.Element) => {
+const withMock = (location: string, element: React.JSX.Element) => {
     return (<MeRouterContext.Provider value={{getLocation: () => location, route: (path) => {}}}>
         {element}
     </MeRouterContext.Provider>);
@@ -44,22 +44,20 @@ test("Route formats with missing optional param", () => {
 });
 
 test("Router matches simple route", () => {
-    const output = renderer.create(withMock("/secondview/",
+    render(withMock("/secondview/",
         <MeRouter routes={[
             new MeRoute(MePath.then("firstview")).callback(() =>  <h1>First View</h1>),
             new MeRoute(MePath.then("secondview")).callback(() => <h1>Second View</h1>),
             new MeRoute(MePath.then("thirdview")).callback(() => <h1>Third View</h1>),
         ]} />
-    )).toJSON() as renderer.ReactTestRendererNode;
+    ));
 
-    assertRendering(output,
-        <h1>Second View</h1>
-    );
+    expect(screen.getByRole('heading')).toHaveTextContent('Second View')
 });
 
 test("Router matches route with params", () => {
     const {str, num} = MePath;
-    const output = renderer.create(withMock("/thirdview/123456789/details",
+    const rendering = render(withMock("/thirdview/123456789/details",
         <MeRouter routes={[
             new MeRoute(MePath.then("firstview")).callback(() => <h1>First View</h1>),
             new MeRoute(MePath.then("secondview")).callback(() => <h1>Second View</h1>),
@@ -70,33 +68,26 @@ test("Router matches route with params", () => {
                 </div>
             ),
         ]} />
-    )).toJSON() as renderer.ReactTestRendererNode;
+    ));
 
-    assertRendering(output,
-        <div>
-            <h1>details</h1>
-            <span>123456789</span>
-        </div>
-    );
+    expect(rendering.container).toMatchSnapshot();
 });
 
 test("Router matches not found", () => {
     const {path} = MePath;
-    const output = renderer.create(withMock("/abcdef",
+    render(withMock("/abcdef",
         <MeRouter routes={[
             new MeRoute(MePath.then("home")).callback(() => <h1>Welcome</h1>),
             new MeRoute(MePath.then(path("path"))).callback(() => <h1>Not Found</h1>),
         ]} />
-    )).toJSON() as renderer.ReactTestRendererNode;
+    ));
 
-    assertRendering(output,
-        <h1>Not Found</h1>
-    );
+    expect(screen.getByRole('heading')).toHaveTextContent('Not Found');
 });
 
 test("Router subroutes", () => {
     const {str, path} = MePath;
-    const output = renderer.create(withMock("/mainView/subView1/subView2",
+    render(withMock("/mainView/subView1/subView2",
         <MeRouter routes={[
             new MeRoute(MePath.then("mainView").then(path("path"))).callback((params) =>
                 <MeRouter path={"/" + params.path} routes={[
@@ -105,9 +96,7 @@ test("Router subroutes", () => {
                 ]} />
             )
         ]} />
-    )).toJSON() as renderer.ReactTestRendererNode;
+    ));
 
-    assertRendering(output,
-        <h1>subView2</h1>
-    );
+    expect(screen.getByRole('heading')).toHaveTextContent('subView2');
 });

@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 import React, {useState} from "react";
 import { MeSelect } from "../lib/select";
 import {findAllByRole, findByRole, findByTestId, findByText} from '@testing-library/dom'

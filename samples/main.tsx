@@ -4,11 +4,11 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 import React from "react";
-import ReactDOM from "react-dom";
-import { columnsFrom, MeTable, renderField } from "../lib/table";
+import { createRoot } from 'react-dom/client';
+import { MeTable, renderField } from "../lib/table";
 import { MeFlex } from "../lib/layout";
 
-const Main = (): JSX.Element => {
+const Main = (): React.JSX.Element => {
   return <div>
     <h1>Horizontal Flex</h1>
     <HorizontalFlexSample />
@@ -19,7 +19,7 @@ const Main = (): JSX.Element => {
   </div>
 }
 
-const HorizontalFlexSample = (): JSX.Element => {
+const HorizontalFlexSample = (): React.JSX.Element => {
   return <MeFlex flexDirection="row" alignItems="center" flexGap="0.4em" style={{borderStyle: "solid"}}>
     <div style={{width: 200, height: 100, backgroundColor: "red"}}></div>
     <div style={{width: 200, height: 100, backgroundColor: "green"}}></div>
@@ -27,7 +27,7 @@ const HorizontalFlexSample = (): JSX.Element => {
   </MeFlex>
 }
 
-const VerticalFlexSample = (): JSX.Element => {
+const VerticalFlexSample = (): React.JSX.Element => {
   return <MeFlex flexDirection="column" alignItems="center" flexGap="0.4em" style={{borderStyle: "solid"}}>
     <div style={{width: 200, height: 100, backgroundColor: "red"}}></div>
     <div style={{width: 200, height: 100, backgroundColor: "green"}}></div>
@@ -35,7 +35,7 @@ const VerticalFlexSample = (): JSX.Element => {
   </MeFlex>
 }
 
-const TableSample = (): JSX.Element => {
+const TableSample = (): React.JSX.Element => {
     const people = [
       { name: "Nannie", surname: "Reid", age: 23 },
       { name: "Ernest", surname: "Avila", age: 64 },
@@ -48,4 +48,5 @@ const TableSample = (): JSX.Element => {
   ]} />
 }
 
-ReactDOM.render(<Main />, document.querySelector("#root"));
+const root = createRoot(document.querySelector("#root")!);
+root.render(<Main />);

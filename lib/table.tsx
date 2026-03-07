@@ -29,7 +29,7 @@ export const renderField = <T, >(field: keyof T): Renderer<T> => {
 export const columnsFrom = <T, >(...fields: Array<keyof T>): Array<MeColumn<T>> =>
   fields.map((field) => ({label: String(field), render: renderField(field)}));
 
-export const MeTable = <T, >(props: MeTableProps<T>): JSX.Element => {
+export const MeTable = <T, >(props: MeTableProps<T>): React.JSX.Element => {
   return <Table>
     <TableHead>
       <TableRow>

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Router matches route with params 1`] = `
+<div>
+  <div>
+    <h1>
+      details
+    </h1>
+    <span>
+      123456789
+    </span>
+  </div>
+</div>
+`;

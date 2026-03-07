@@ -1,7 +1,8 @@
 import React from "react";
-import renderer from "react-test-renderer";
+import '@testing-library/jest-dom';
+import { render } from '@testing-library/react';
 import { columnsFrom, renderField, MeTable } from "../lib/table";
-import assertRendering from "./assert";
+import { assertRendering } from "./assert";
 
 test("MeTable renders", () => {
   const data = [
@@ -10,11 +11,12 @@ test("MeTable renders", () => {
     { first: 3, second: "third row", third: true, fourth: 30.3 },
   ];
 
-  const output = renderer.create(
+  const rendering = render(
       <MeTable values={data} columns={columnsFrom("first", "second", "third", "fourth")} />
-    ).toJSON() as renderer.ReactTestRendererNode;
+    );
 
-  assertRendering(output,
+
+  assertRendering(rendering.container.firstElementChild!!,
     <table>
       <thead><tr><th>first</th><th>second</th><th>third</th><th>fourth</th></tr></thead>
       <tbody>
@@ -33,16 +35,16 @@ test("MeTable custom rendering", () => {
     { first: 3, second: "third row", third: true, fourth: 30.3 },
   ];
 
-  const output = renderer.create(
+  const rendering = render(
     <MeTable values={data} columns={[
       {label: "Column #1", render: renderField("first")},
       {label: "Column #2", render: (value) => `"${value.second}"`},
       {label: "Column #3", render: renderField("third")},
       {label: "Column #4", render: (value) => <b>{value.fourth}</b>},
       {label: "Column #5", render: (_, index) => <span>{index}</span>}
-    ]} />).toJSON() as renderer.ReactTestRendererNode;
+    ]} />);
 
-  assertRendering(output,
+  assertRendering(rendering.container.firstElementChild!!,
     <table>
       <thead><tr><th>Column #1</th><th>Column #2</th><th>Column #3</th><th>Column #4</th><th>Column #5</th></tr></thead>
       <tbody>

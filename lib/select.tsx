@@ -64,11 +64,11 @@ const meMultipleAdapter = <T,> (props: MeSelectProps<T, true, true>): MeSelectAd
 
 interface PopoverLoaderProps {
     open: boolean;
-    anchorRef: React.RefObject<Element>;
+    anchorRef: React.RefObject<Element|null>;
     loadingLabel?: string;
 }
 
-const PopoverLoader = (props: PopoverLoaderProps): JSX.Element => {
+const PopoverLoader = (props: PopoverLoaderProps): React.JSX.Element => {
     return <Popover open={props.open}
             anchorEl={props.anchorRef.current} anchorOrigin={{vertical: "top", horizontal: "center"}}
             transformOrigin={{vertical: "top", horizontal: "center"}}
@@ -94,7 +94,7 @@ interface MeSelectProps<T, M extends Bool, O extends Bool> extends Omit<BaseSele
     noOptionLabel?: string;
 }
 
-export const MeSelect = <T, M extends Bool = false, O extends Bool = false>(props: MeSelectProps<T, M, O>): JSX.Element => {
+export const MeSelect = <T, M extends Bool = false, O extends Bool = false>(props: MeSelectProps<T, M, O>): React.JSX.Element => {
     const {optional, options, value, getKey, onChange, loadingLabel,
         noValueLabel, noOptionLabel, renderValue, ...selectProps} = props;
     const [optionValues, setOptionValues] = useState(options instanceof Array ? options : []);

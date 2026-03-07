@@ -86,7 +86,7 @@ export class MePath<P = {}> implements MePathSpec<P> {
   }
 }
 
-export type RouteRenderer<MP extends {}, OP> = [MeRoute<MP, OP>, (params: MP & Partial<OP>) => JSX.Element];
+export type RouteRenderer<MP extends {}, OP> = [MeRoute<MP, OP>, (params: MP & Partial<OP>) => React.JSX.Element];
 
 export class MeRoute<MP extends {}, OP = {}> {
   private readonly regex: RegExp;
@@ -109,7 +109,7 @@ export class MeRoute<MP extends {}, OP = {}> {
     return this.mandatory.serialize(mandatory) + (optional ? this.optional.serialize(optional) : "");
   }
 
-  public callback(value: (params: MP & Partial<OP>) => JSX.Element): RouteRenderer<MP, OP> {
+  public callback(value: (params: MP & Partial<OP>) => React.JSX.Element): RouteRenderer<MP, OP> {
     return [this, value];
   }
 
@@ -157,7 +157,7 @@ const updateWindowLocation = (path: string): string => {
   return path;
 }
 
-const MeRouterContextProvider = (props: PropsWithChildren<{}>): JSX.Element => {
+const MeRouterContextProvider = (props: PropsWithChildren<{}>): React.JSX.Element => {
     const [location, setLocation] = useState(window.location.pathname)
 
     /* eslint-disable react-hooks/immutability */
@@ -171,5 +171,5 @@ const MeRouterContextProvider = (props: PropsWithChildren<{}>): JSX.Element => {
     </MeRouterContext.Provider>;
 };
 
-export const withMeRouter = (element: JSX.Element): JSX.Element =>
+export const withMeRouter = (element: React.JSX.Element): React.JSX.Element =>
   <MeRouterContextProvider>{element}</MeRouterContextProvider>;
