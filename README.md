@@ -7,9 +7,11 @@ This library can simply be installed using npm:
 npm install react-me
 ```
 ## Routing
+This API allows you to define routes you can navigate to from your UI.
 In order to use the routing components you will need to wrap your top level component with the `withMeRouter` directive as shown below:
 ```javascript
-ReactDOM.render(withMeRouter(<App />), document.querySelector("#root"));
+const root = createRoot(document.querySelector("#root")!);
+root.render(withMeRouter(<App />));
 ```
 
 Then, simple routing can easily be achieved as shown in the code snippet below
